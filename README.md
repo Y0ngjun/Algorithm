@@ -1,2 +1,2 @@
-# solved.ac
-solved.ac with C++ code
+# Algorithm
+Algorithm with C++ code
