@@ -1,2 +1,2 @@
 # Algorithm
-Algorithm with C++ code
+Algorithm with C++
