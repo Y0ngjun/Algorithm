@@ -1,4 +1,5 @@
 #include <iostream>
+#include <numeric>
 
 using namespace std;
 
@@ -13,30 +14,9 @@ int main()
 	int a = a1 * b2 + a2 * b1;
 	int b = b1 * b2;
 
-	while (true)
-	{
-		int i = 1;
-		bool flag = false;
-		while (true)
-		{
-			++i;
-			if (a % i == 0 && b % i == 0)
-			{
-				a /= i;
-				b /= i;
-				break;
-			}
-			if (i > a || i > b)
-			{
-				flag = true;
-				break;
-			}
-		}
-		if (flag)
-			break;
-	}
+	int GCD = gcd(a, b);
 
-	cout << a << ' ' << b;
+	cout << a / GCD << ' ' << b / GCD;
 
 	return 0;
 }
