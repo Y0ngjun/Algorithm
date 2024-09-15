@@ -8,3 +8,5 @@ Algorithm with C++
 2024-08-23 Silver 2
 
 2024-08-31 Silver 1
+
+2024-09-16 Gold 5
