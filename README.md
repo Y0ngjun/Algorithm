@@ -1,7 +1,7 @@
 # Algorithm
 Algorithm with C++
 
-## SOLVED.AC TIER
+## Solved.ac Tier
 2024-07-08 Silver 4 <br>
 2024-07-15 Silver 3 <br>
 2024-08-23 Silver 2 <br>
