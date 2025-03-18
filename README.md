@@ -9,3 +9,4 @@ Algorithm with C++
 2024-09-16 Gold 5 <br>
 2024-10-08 Gold 4 <br>
 2024-11-11 Gold 3 <br>
+2024-11-28 Gold 2 <br>
