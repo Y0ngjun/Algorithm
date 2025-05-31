@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void Dijkstra(int V, int root, vector<int>& distance, const vector<vector<pair<int, int>>>& graph)
+void dijkstra(int V, int root, vector<int>& distance, const vector<vector<pair<int, int>>>& graph)
 {
 	distance.assign(V, INT_MAX);
 	distance[root] = 0;
