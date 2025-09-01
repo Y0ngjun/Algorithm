@@ -41,3 +41,4 @@ Algorithm with C++
 2025-04-17 Gold 1 <br>
 2025-05-24 Platinum 5 <br>
 2025-06-25 Platinum 4 <br>
+2025-09-02 Platinum 3 <br>
