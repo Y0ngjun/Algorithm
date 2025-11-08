@@ -24,6 +24,10 @@ void update(int& a, int b)
 
 int main()
 {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+
     // 0-based
     int n, a, b, m;
     cin >> n >> a >> b >> m;
