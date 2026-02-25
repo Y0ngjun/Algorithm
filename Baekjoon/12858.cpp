@@ -5,30 +5,16 @@
 
 using namespace std;
 
-vector<int> arr;            // 원본 배열
-vector<long long> leftVal;  // 구간의 첫 번째 노드의 값
-vector<long long> rightVal; // 구간의 첫 번째 노드를 제외한 값들의 gcd
-vector<long long> tree;     // 구간의 gcd
-vector<long long> lazy;     // lazy 값
+vector<int> A;              // 원본 배열
+vector<int> D;              // 차분 배열
+vector<long long> addTree;  // 더해진 기록을 저장하는 트리
+vector<long long> gcdTree;  // 차분값의 gcd를 저장하는 트리
 
-long long myGcd(long long a, long long b)
-{
-    if (a == -1)
-        return abs(b);
-
-    if (b == -1)
-        return abs(a);
-
-    return gcd(abs(a), abs(b));
-}
-
-void initTree(int node, int start, int end)
+void initAddTree(int node, int start, int end)
 {
     if (start == end)
     {
-        leftVal[node] = arr[start];
-        rightVal[node] = -1;
-        tree[node] = arr[start];
+        addTree[node] = A[start];
         return;
     }
 
@@ -36,37 +22,11 @@ void initTree(int node, int start, int end)
     int rightNode = node * 2 + 1;
     int mid = (start + end) / 2;
 
-    initTree(leftNode, start, mid);
-    initTree(rightNode, mid + 1, end);
-
-    leftVal[node] = leftVal[leftNode];
-    rightVal[node] = myGcd(rightVal[leftNode], tree[rightNode]);
-    tree[node] = myGcd(leftVal[node], rightVal[node]);
+    initAddTree(leftNode, start, mid);
+    initAddTree(rightNode, mid + 1, end);
 }
 
-void updateLazy(int node, int start, int end)
-{
-    if (lazy[node] == 0)
-    {
-        return;
-    }
-
-    int leftNode = node * 2;
-    int rightNode = node * 2 + 1;
-    int mid = (start + end) / 2;
-
-    leftVal[leftNode] += lazy[node];
-    leftVal[rightNode] += lazy[node];
-
-    tree[leftNode] = myGcd(leftVal[leftNode], rightVal[leftNode]);
-    tree[rightNode] = myGcd(leftVal[rightNode], rightVal[rightNode]);
-
-    lazy[leftNode] += lazy[node];
-    lazy[rightNode] += lazy[node];
-    lazy[node] = 0;
-}
-
-void updateTree(int node, int start, int end, int T, int A, int B)
+void updateAddTree(int node, int start, int end, int T, int A, int B)
 {
     if (B < start || end < A)
     {
@@ -75,9 +35,7 @@ void updateTree(int node, int start, int end, int T, int A, int B)
 
     if (A <= start && end <= B)
     {
-        leftVal[node] += T;
-        tree[node] = myGcd(leftVal[node], rightVal[node]);
-        lazy[node] += T;
+        addTree[node] += T;
         return;
     }
 
@@ -85,34 +43,87 @@ void updateTree(int node, int start, int end, int T, int A, int B)
     int rightNode = node * 2 + 1;
     int mid = (start + end) / 2;
 
-    updateLazy(node, start, end);
-    updateTree(leftNode, start, mid, T, A, B);
-    updateTree(rightNode, mid + 1, end, T, A, B);
-
-    leftVal[node] = leftVal[leftNode];
-    rightVal[node] = myGcd(rightVal[leftNode], tree[rightNode]);
-    tree[node] = myGcd(leftVal[node], rightVal[node]);
+    updateAddTree(leftNode, start, mid, T, A, B);
+    updateAddTree(rightNode, mid + 1, end, T, A, B);
 }
 
-int query(int node, int start, int end, int A, int B)
+long long queryAddTree(int node, int start, int end, int k)
 {
-    if (B < start || end < A)
+    if (k < start || end < k)
     {
-        return -1;
+        return 0ll;
     }
 
-    if (A <= start && end <= B)
+    if (start == end)
     {
-        return tree[node];
+        return addTree[node];
     }
 
     int leftNode = node * 2;
     int rightNode = node * 2 + 1;
     int mid = (start + end) / 2;
 
-    updateLazy(node, start, end);
+    return addTree[node] + queryAddTree(leftNode, start, mid, k) + queryAddTree(rightNode, mid + 1, end, k);
+}
 
-    return myGcd(query(leftNode, start, mid, A, B), query(rightNode, mid + 1, end, A, B));
+void initGcdTree(int node, int start, int end)
+{
+    if (start == end)
+    {
+        gcdTree[node] = D[start];
+        return;
+    }
+
+    int leftNode = node * 2;
+    int rightNode = node * 2 + 1;
+    int mid = (start + end) / 2;
+
+    initGcdTree(leftNode, start, mid);
+    initGcdTree(rightNode, mid + 1, end);
+
+    gcdTree[node] = gcd(gcdTree[leftNode], gcdTree[rightNode]);
+}
+
+void updateGcdTree(int node, int start, int end, int k, int T)
+{
+    if (k < start || end < k)
+    {
+        return;
+    }
+
+    if (start == end)
+    {
+        gcdTree[node] += T;
+        return;
+    }
+
+    int leftNode = node * 2;
+    int rightNode = node * 2 + 1;
+    int mid = (start + end) / 2;
+
+    updateGcdTree(leftNode, start, mid, k, T);
+    updateGcdTree(rightNode, mid + 1, end, k, T);
+
+    gcdTree[node] = gcd(gcdTree[leftNode], gcdTree[rightNode]);
+}
+
+long long queryGcdTree(int node, int start, int end, int A, int B)
+{
+    if (B < start || end < A)
+    {
+        return 0ll;
+    }
+
+    if (A <= start && end <= B)
+    {
+        return gcdTree[node];
+    }
+
+    int leftNode = node * 2;
+    int rightNode = node * 2 + 1;
+    int mid = (start + end) / 2;
+
+    return gcd(queryGcdTree(leftNode, start, mid, A, B), queryGcdTree(rightNode, mid + 1, end, A, B));
 }
 
 int main()
@@ -123,18 +134,19 @@ int main()
     int N;
     cin >> N;
 
-    arr.resize(N + 1);
-    leftVal.resize(N * 4);
-    rightVal.resize(N * 4);
-    tree.resize(N * 4);
-    lazy.resize(N * 4);
+    A.resize(N + 1);
+    D.resize(N + 1);
+    addTree.resize(N * 4);
+    gcdTree.resize(N * 4);
 
     for (int i = 1; i <= N; i++)
     {
-        cin >> arr[i];
+        cin >> A[i];
+        D[i] = A[i] - A[i - 1];
     }
 
-    initTree(1, 1, N);
+    initAddTree(1, 1, N);
+    initGcdTree(1, 1, N);
 
     int Q;
     cin >> Q;
@@ -146,11 +158,20 @@ int main()
 
         if (T == 0)
         {
-            cout << query(1, 1, N, A, B) << '\n';
+            if (A == B)
+            {
+                cout << queryAddTree(1, 1, N, A) << '\n';
+            }
+            else
+            {
+                cout << gcd(queryAddTree(1, 1, N, A), queryGcdTree(1, 1, N, A + 1, B)) << '\n';
+            }
         }
         else
         {
-            updateTree(1, 1, N, T, A, B);
+            updateAddTree(1, 1, N, T, A, B);
+            updateGcdTree(1, 1, N, A, T);
+            updateGcdTree(1, 1, N, B + 1, -T);
         }
     }
 
