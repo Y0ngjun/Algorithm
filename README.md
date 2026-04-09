@@ -17,6 +17,6 @@ Algorithm with C++
 2026-02-23 Platinum 2 <br>
 
 ## Comment
-2026-04-09 부터 BaekjoonHub 사용으로 폴더 변경
-Baekjoon -> 백준
-Programmers -> 프로그래머스
+2026-04-09 부터 BaekjoonHub 사용으로 폴더 변경  
+Baekjoon -> 백준  
+Programmers -> 프로그래머스  
