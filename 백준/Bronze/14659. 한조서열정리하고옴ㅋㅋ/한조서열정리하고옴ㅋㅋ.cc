@@ -1,6 +1,5 @@
 #include <iostream>
-#include <vector>
-#include <stack>
+#include <algorithm>
 
 using namespace std;
 
@@ -12,29 +11,26 @@ int main()
     int N;
     cin >> N;
 
-    vector<int> v(N + 2);
-    for (int i = 1; i <= N; i++)
-    {
-        cin >> v[i];
-    }
-    v[0] = 100002;
-    v[N + 1] = 100001;
-
-    stack<int> stk;
-    stk.push(0);
-
     int answer = 0;
+    int pivot = 0;
+    int count = 0;
 
-    for (int i = 1; i <= N + 1; i++)
+    for (int i = 0; i < N; i++)
     {
-        while (v[stk.top()] < v[i])
-        {
-            int kill = i - stk.top() - 1;
-            answer = max(answer, kill);
-            stk.pop();
-        }
+        int h;
+        cin >> h;
 
-        stk.push(i);
+        if (h > pivot)
+        {
+            answer = max(answer, count);
+            pivot = h;
+            count = 0;
+        }
+        else
+        {
+            count++;
+            answer = max(answer, count);
+        }
     }
 
     cout << answer;
