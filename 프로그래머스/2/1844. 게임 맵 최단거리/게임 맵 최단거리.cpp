@@ -26,9 +26,6 @@ int solution(vector<vector<int>> maps)
         auto [y, x, d] = bfs.front();
         bfs.pop();
 
-        if (y == n - 1 && x == m - 1)
-            return d;
-
         for (int dir = 0; dir < 4; dir++)
         {
             int ny = y + dy[dir];
@@ -36,6 +33,9 @@ int solution(vector<vector<int>> maps)
 
             if (ny < 0 || ny >= n || nx < 0 || nx >= m || visited[ny][nx] || maps[ny][nx] == 0)
                 continue;
+
+            if (ny == n - 1 && nx == m - 1)
+                return d + 1;
 
             bfs.push({ ny, nx, d + 1 });
             visited[ny][nx] = true;
