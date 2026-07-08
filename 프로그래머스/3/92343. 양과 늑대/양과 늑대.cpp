@@ -11,34 +11,31 @@
 
 using namespace std;
 
-int DFS(const vector<int>& info, const vector<vector<int>>& adj, vector<vector<char>>& visited, int bitmask, int node, int sheep, int wolves)
+int DFS(const vector<int>& info, const vector<int>& adj, vector<int>& visited, int bitmask)
 {
-    if (visited[bitmask][node])
+    int n = info.size();
+    int sheep = 0, wolves = 0;
+
+    for (int i = 0; i < n; i++)
+        if (bitmask & (1 << i))
+            info[i] ? wolves++ : sheep++;
+
+    if (wolves >= sheep || visited[bitmask])
         return sheep;
+    visited[bitmask] = true;
 
-    visited[bitmask][node] = true;
+    int best = sheep;
 
-    int bit = (1 << node);
-
-    if (!(bitmask & bit))
+    for (int i = 0; i < n; i++)
     {
-        bitmask |= bit;
-        sheep += (1 - info[node]);
-        wolves += info[node];
+        if ((1 << i) & bitmask || !(adj[i] & bitmask))
+            continue;
+
+        int temp = DFS(info, adj, visited, bitmask | (1 << i));
+        best = temp > best ? temp : best;
     }
 
-    if (wolves >= sheep)
-        return sheep;
-
-    int ret = sheep;
-
-    for (int v : adj[node])
-    {
-        int temp = DFS(info, adj, visited, bitmask, v, sheep, wolves);
-        ret = temp > ret ? temp : ret;
-    }
-
-    return ret;
+    return best;
 }
 
 int solution(vector<int> info, vector<vector<int>> edges)
@@ -46,16 +43,16 @@ int solution(vector<int> info, vector<vector<int>> edges)
     int n = info.size();
     int m = edges.size();
 
-    vector<vector<int>> adj(n);
+    vector<int> adj(n);
     for (int i = 0; i < m; i++)
     {
         int u = edges[i][0];
         int v = edges[i][1];
 
-        adj[u].push_back(v);
-        adj[v].push_back(u);
+        adj[u] |= (1 << v);
+        adj[v] |= (1 << u);
     }
 
-    vector<vector<char>> visited((1 << n), vector<char>(n, false));
-    return DFS(info, adj, visited, 0, 0, 0, 0);
+    vector<int> visited(1 << n);
+    return DFS(info, adj, visited, 1);
 }
