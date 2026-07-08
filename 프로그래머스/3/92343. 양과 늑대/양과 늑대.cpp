@@ -1,11 +1,12 @@
 /*
 * 알고리즘 DFS
-* 1. 현재 상태로 방문한적 있다면 return
-* 2. 현재 노드의 첫 방문이라면 방문 처리
-* 3. 현재 노드의 첫 방문이라면 sheep, wolves를 업데이트
-* 4. wolves >= sheep이라면 return
-* 5. 인접한 모든 노드에 대해 DFS
-* 6. max(sheep, max(DFS))를 return
+* 1. 현재 비트마스크로 sheep, wolves 계산
+* 2. 현재 비트마스크에 방문한적 있거나 wolves >= sheep일 경우
+*   2-1. return sheep
+* 3. 방문 기록
+* 4. 현재 비트마스크에서 도달 가능한 모드 노드에 대해 DFS 수행
+*   4-1. best에 최대값 저장
+* 5. return best
 */
 #include <vector> 
 
