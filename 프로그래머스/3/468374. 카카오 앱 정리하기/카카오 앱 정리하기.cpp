@@ -68,7 +68,7 @@ vector<vector<int>> solution(vector<vector<int>> board, vector<vector<int>> comm
                     int c = (apps[mover].x + apps[mover].size) % W;
                     for (int r = apps[mover].y; r < apps[mover].y + apps[mover].size; r++)
                     {
-                        int adj = board[r % H][c];
+                        int adj = board[r][c];
                         if (adj != 0 && movers.count(adj) == 0)
                         {
                             movers.insert(adj);
@@ -81,7 +81,7 @@ vector<vector<int>> solution(vector<vector<int>> board, vector<vector<int>> comm
                     int r = (apps[mover].y + apps[mover].size) % H;
                     for (int c = apps[mover].x; c < apps[mover].x + apps[mover].size; c++)
                     {
-                        int adj = board[r][c % W];
+                        int adj = board[r][c];
                         if (adj != 0 && movers.count(adj) == 0)
                         {
                             movers.insert(adj);
@@ -94,7 +94,7 @@ vector<vector<int>> solution(vector<vector<int>> board, vector<vector<int>> comm
                     int c = (apps[mover].x - 1 + W) % W;
                     for (int r = apps[mover].y; r < apps[mover].y + apps[mover].size; r++)
                     {
-                        int adj = board[r % H][c];
+                        int adj = board[r][c];
                         if (adj != 0 && movers.count(adj) == 0)
                         {
                             movers.insert(adj);
@@ -107,7 +107,7 @@ vector<vector<int>> solution(vector<vector<int>> board, vector<vector<int>> comm
                     int r = (apps[mover].y - 1 + H) % H;
                     for (int c = apps[mover].x; c < apps[mover].x + apps[mover].size; c++)
                     {
-                        int adj = board[r][c % W];
+                        int adj = board[r][c];
                         if (adj != 0 && movers.count(adj) == 0)
                         {
                             movers.insert(adj);
