@@ -1,4 +1,3 @@
-// #include <iostream>
 #include <vector>
 
 using namespace std;
@@ -22,6 +21,11 @@ int solution(vector<int> queue1, vector<int> queue2)
         sum += i;
     }
 
+    if (sum % 2)
+    {
+        return -1;
+    }
+
     long long half = sum / 2;
 
     int begin = 0;
@@ -30,8 +34,6 @@ int solution(vector<int> queue1, vector<int> queue2)
 
     while (begin < n + m && end < n + m)
     {
-        // cout << q1 << endl;
-
         if (q1 > half)
         {
             if (begin < n)
