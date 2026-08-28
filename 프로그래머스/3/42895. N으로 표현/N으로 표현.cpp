@@ -20,6 +20,16 @@ int solution(int N, int number)
     dp[7].insert(N * 1111111);
     dp[8].insert(N * 11111111);
 
+    unordered_set<int> visited;
+    visited.insert(N * 1);
+    visited.insert(N * 11);
+    visited.insert(N * 111);
+    visited.insert(N * 1111);
+    visited.insert(N * 11111);
+    visited.insert(N * 111111);
+    visited.insert(N * 1111111);
+    visited.insert(N * 11111111);
+
     for (int i = 2; i <= 8; i++)
     {
         for (int l = 1; l < i; l++)
@@ -30,13 +40,21 @@ int solution(int N, int number)
             {
                 for (int rv : dp[r])
                 {
-                    dp[i].insert(lv + rv);
-                    dp[i].insert(lv - rv);
-                    dp[i].insert(lv * rv);
+                    vector<int> candidates;
+                    candidates.push_back(lv + rv);
+                    candidates.push_back(lv - rv);
+                    candidates.push_back(lv * rv);
+                    candidates.push_back(lv / rv);
 
-                    if (rv != 0)
+                    for (int can : candidates)
                     {
-                        dp[i].insert(lv / rv);
+                        if (can == 0 || visited.count(can))
+                        {
+                            continue;
+                        }
+
+                        dp[i].insert(can);
+                        visited.insert(can);
                     }
                 }
             }
