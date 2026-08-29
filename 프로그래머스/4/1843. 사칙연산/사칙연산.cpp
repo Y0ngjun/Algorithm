@@ -22,25 +22,23 @@ int solution(vector<string> arr)
 
     for (int len = 2; len <= numOfnums; len++)
     {
-        for (int start = 0; start + len <= numOfnums; start++)
+        for (int ll = 0, rr = ll + len - 1; rr < numOfnums; ll++, rr++)
         {
-            for (int left = 1; left < len; left++)
+            for (int lr = ll, rl = lr + 1; lr < rr; lr++, rl++)
             {
-                int right = len - left;
-
-                if (arr[(start + left) * 2 - 1] == "+")
+                if (arr[lr * 2 + 1] == "+")
                 {
-                    biggest[start][start + len - 1] = max(biggest[start][start + len - 1],
-                        biggest[start][start + left - 1] + biggest[start + left][start + len - 1]);
-                    smallest[start][start + len - 1] = min(smallest[start][start + len - 1],
-                        smallest[start][start + left - 1] + smallest[start + left][start + len - 1]);
+                    biggest[ll][rr] = max(biggest[ll][rr],
+                        biggest[ll][lr] + biggest[rl][rr]);
+                    smallest[ll][rr] = min(smallest[ll][rr],
+                        smallest[ll][lr] + smallest[rl][rr]);
                 }
                 else
                 {
-                    biggest[start][start + len - 1] = max(biggest[start][start + len - 1],
-                        biggest[start][start + left - 1] - smallest[start + left][start + len - 1]);
-                    smallest[start][start + len - 1] = min(smallest[start][start + len - 1],
-                        smallest[start][start + left - 1] - biggest[start + left][start + len - 1]);
+                    biggest[ll][rr] = max(biggest[ll][rr],
+                        biggest[ll][lr] - smallest[rl][rr]);
+                    smallest[ll][rr] = min(smallest[ll][rr],
+                        smallest[ll][lr] - biggest[rl][rr]);
                 }
             }
         }
